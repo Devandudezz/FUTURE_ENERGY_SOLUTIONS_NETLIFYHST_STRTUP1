@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+{% block title %}Future Energy Solutions – Clean Solar Energy Solutions{% endblock %}
+
+{% block content %}
+
+<!-- ══════════ HERO SECTION WITH DYNAMIC CAROUSEL ══════════ -->
+<section class="hero-slider-section">
+  <!-- SLIDES WRAPPER -->
+  <div class="hero-slides" id="heroSlides">
+
+    <!-- Slide 1: Residential Solar -->
+    <div class="hero-slide active">
+      <div class="slide-bg" style="background-image: url('{{ url_for('static', filename='hero_solar.jpg') }}');"></div>
+      <div class="slide-overlay"></div>
+      <div class="container hero-container">
+        <div class="hero-content" data-aos="left">
+          <div class="hero-badges">
+            <span class="hero-badge">🏛️ MSME Registered</span>
+            <span class="hero-badge">💰 Save up to ₹78,000</span>
+          </div>
+          <h1>Power Your Home with <span class="accent-gradient">Clean Solar Energy</span></h1>
+          <p class="hero-sub">Slash your monthly electricity bill by up to 90%. Includes 25-year panel warranty + 5-year comprehensive service warranty.</p>
+          <div class="hero-btns">
+            <a href="{{ url_for('contact') }}" class="btn btn-primary btn-lg">⚡ Get Free Quote</a>
+            <a href="{{ url_for('services') }}" class="btn btn-glass btn-lg">📖 Explore Solutions</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Commercial & Office Solar -->
+    <div class="hero-slide">
+      <div class="slide-bg" style="background-image: url('{{ url_for('static', filename='commercial_solar.jpg') }}');"></div>
+      <div class="slide-overlay"></div>
+      <div class="container hero-container">
+        <div class="hero-content">
+          <div class="hero-badges">
+            <span class="hero-badge">🏢 Commercial (3-50 kW)</span>
+            <span class="hero-badge">📊 40% Tax Depreciation</span>
+          </div>
+          <h1>Empower Your Business with <span class="accent-gradient">Smarter Solar Energy</span></h1>
+          <p class="hero-sub">Turn your commercial roof into a revenue-generating power plant with high ROI payback models.</p>
+          <div class="hero-btns">
+            <a href="{{ url_for('services') }}#commercial" class="btn btn-primary btn-lg">🏢 Commercial Solutions</a>
+            <a href="{{ url_for('contact') }}" class="btn btn-glass btn-lg">📞 Request Audit</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Industrial Solar Farm -->
+    <div class="hero-slide">
+      <div class="slide-bg" style="background-image: url('{{ url_for('static', filename='industrial_solar.jpg') }}');"></div>
+      <div class="slide-overlay"></div>
+      <div class="container hero-container">
+        <div class="hero-content">
+          <div class="hero-badges">
+            <span class="hero-badge">🏭 Industrial Plants (50 kW+)</span>
+          </div>
+          <h1>Mega Power Plants for <span class="accent-gradient">Industrial Autonomy</span></h1>
+          <p class="hero-sub">Scale operations while cutting grid tariff costs with custom engineered ground-mount and rooftop solar EPC.</p>
+          <div class="hero-btns">
+            <a href="{{ url_for('services') }}#industrial" class="btn btn-primary btn-lg">🏭 Industrial Solutions</a>
+            <a href="https://wa.me/{{ company_whatsapp }}" class="btn btn-whatsapp btn-lg" target="_blank">💬 WhatsApp Support</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SLIDER CONTROLS & NAVIGATION -->
+  <button class="slider-arrow arrow-left" id="prevSlide" aria-label="Previous Slide">❮</button>
+  <button class="slider-arrow arrow-right" id="nextSlide" aria-label="Next Slide">❯</button>
+
+  <div class="slider-dots" id="sliderDots">
+    <span class="dot active" data-index="0"></span>
+    <span class="dot" data-index="1"></span>
+    <span class="dot" data-index="2"></span>
+  </div>
+</section>
+
+
+<!-- ══════════ EYE-CATCHING SLOGAN BANNER ══════════ -->
+<section class="slogan-banner-section">
+  <div class="container text-center">
+    <h2 class="slogan-heading">"Sunlight is Free. Stop Paying Rent to the Power Grid."</h2>
+    <p class="slogan-sub">Lock in 25 Years of Clean Energy Independence • Guaranteed 25-Year Panel Output Warranty + 5-Year Comprehensive On-Site Service Warranty</p>
+  </div>
+</section>
+
+
+<!-- ══════════ INTERACTIVE RESIDENTIAL SAVINGS CALCULATOR WIDGET ══════════ -->
+<section class="section home-calc-section">
+  <div class="container">
+    <div class="calc-widget-card" data-aos="up">
+      <div class="calc-widget-header text-center">
+        <h2 class="sec-title">Estimate Your Home Solar Savings</h2>
+        <p class="sec-sub">Drag the slider to your average monthly electricity bill to see your custom solar savings estimate.</p>
+      </div>
+
+      <div class="calc-widget-body">
+        <div class="slider-control-box">
+          <div class="slider-label-row">
+            <span>Your Monthly Electricity Bill:</span>
+            <span class="bill-val-display" id="homeBillVal">₹ 4,500 / mo</span>
+          </div>
+          <input type="range" id="homeBillSlider" min="3000" max="35000" step="500" value="4500" class="custom-range-slider">
+          <div class="range-marks">
+            <span>₹3,000</span>
+            <span>₹35,000</span>
+          </div>
+        </div>
+
+        <!-- RESULTS GRID -->
+        <div class="calc-results-grid">
+          <div class="res-card res-highlight">
+            <span class="res-lbl">Recommended System</span>
+            <span class="res-val" id="homeResSystem">3.0 kW</span>
+            <span class="res-sub" id="homeResSystemSub">Rooftop System</span>
+          </div>
+
+          <div class="res-card">
+            <span class="res-lbl">Govt. Subsidy</span>
+            <span class="res-val green-text" id="homeResSubsidy">₹ 54,000</span>
+            <span class="res-sub">PM Surya Ghar</span>
+          </div>
+
+          <div class="res-card">
+            <span class="res-lbl">Annual Savings</span>
+            <span class="res-val gold-text" id="homeResSavings">₹ 48,600</span>
+            <span class="res-sub" id="homeResSavingsSub">/ year</span>
+          </div>
+
+          <div class="res-card">
+            <span class="res-lbl">Payback Period</span>
+            <span class="res-val" id="homeResRoi">3.2 Years</span>
+            <span class="res-sub">Then 22 Yrs Free</span>
+          </div>
+        </div>
+
+        <div class="calc-cta-row text-center">
+          <div class="calc-quote-note" id="calcQuoteNote" style="display: none; margin-bottom: 20px;">
+            <strong>⚠️ Custom Quote Required:</strong> For bills above ₹10,000/month, please share your exact bill reference for accurate system sizing and quote.
+          </div>
+          <a href="{{ url_for('contact') }}" class="btn btn-primary btn-lg">⚡ Get Free Quote & Site Survey</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ SOLAR SOLUTIONS SHOWCASE ══════════ -->
+<section class="section bg-white-surface">
+  <div class="container">
+    <div class="text-center" data-aos="up">
+      <h2 class="sec-title">Solar Solutions for Every Property</h2>
+      <p class="sec-sub">Turnkey solar engineering for residential homes, commercial enterprises, and industrial plants.</p>
+    </div>
+
+    <div class="solutions-grid">
+      <!-- Card 1: Residential -->
+      <div class="solution-card" data-aos="fade-up">
+        <div class="sol-img-wrap">
+          <img src="{{ url_for('static', filename='hero_solar.jpg') }}" alt="Residential Solar Rooftop" loading="lazy">
+          <span class="sol-badge">Residential (3-20 kW)</span>
+        </div>
+        <div class="sol-body">
+          <div class="sol-icon">🏠</div>
+          <h3>Residential Solar Rooftop</h3>
+          <p>3 kW to 20 kW rooftop solar for homes and apartments. Cut electricity bills by up to 90% with PM Surya Ghar subsidy assistance.</p>
+          <a href="{{ url_for('services') }}#residential" class="sol-link">Explore Residential &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Card 2: Commercial -->
+      <div class="solution-card" data-aos="fade-up" data-aos-delay="0.1">
+        <div class="sol-img-wrap">
+          <img src="{{ url_for('static', filename='commercial_solar.jpg') }}" alt="Commercial Solar Installation" loading="lazy">
+          <span class="sol-badge badge-blue">Commercial (3-50 kW)</span>
+        </div>
+        <div class="sol-body">
+          <div class="sol-icon">🏢</div>
+          <h3>Commercial Solar Systems</h3>
+          <p>3 kW to 50 kW rooftop solar for offices, hospitals and retail centers with 40% accelerated tax depreciation.</p>
+          <a href="{{ url_for('services') }}#commercial" class="sol-link">Explore Commercial &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Card 3: Industrial -->
+      <div class="solution-card" data-aos="fade-up" data-aos-delay="0.2">
+        <div class="sol-img-wrap">
+          <img src="{{ url_for('static', filename='industrial_solar.jpg') }}" alt="Industrial Solar Farm" loading="lazy">
+          <span class="sol-badge badge-amber">Industrial (50 kW+)</span>
+        </div>
+        <div class="sol-body">
+          <div class="sol-icon">🏭</div>
+          <h3>Industrial Solar Plants</h3>
+          <p>Heavy-duty solar plants above 50 kW for factories and manufacturing units. Requires direct site survey and custom EPC quote.</p>
+          <a href="{{ url_for('services') }}#industrial" class="sol-link">Explore Industrial &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ CALL TO ACTION BANNER ══════════ -->
+<section class="cta-banner">
+  <div class="container">
+    <div class="cta-inner text-center" data-aos="zoom-in">
+      <h2>Ready to Start Saving Money with Solar Power?</h2>
+      <p>Get a customized solar quote, free roof inspection, 25-year panel warranty and 5-year service warranty today.</p>
+      <div class="cta-btns">
+        <a href="{{ url_for('contact') }}" class="btn btn-primary btn-lg">⚡ Request Free Quote</a>
+      </div>
+    </div>
+  </div>
+</section>{% endblock %}
+

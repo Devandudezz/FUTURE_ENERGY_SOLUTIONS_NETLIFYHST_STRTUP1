@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Services – Future Energy Solutions{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="{{ url_for('index') }}">Home</a> <span>›</span> Services</div>
+    <h1>Our Solar Services</h1>
+    <p>Complete solar solutions for homes, businesses, industries and everything in between.</p>
+  </div>
+</section>
+
+<section class="section bg-white-surface">
+  <div class="container">
+    <div class="services-clean-list">
+      {% for svc in services %}
+      <div class="service-detail-card" id="{{ svc.id }}" data-aos="up">
+        <div class="sdc-header">
+          <div class="sdc-title-group">
+            <h2 class="sdc-title">{{ svc.title }}</h2>
+          </div>
+          <div class="sdc-capacity-badge">
+            <span class="scb-label">Capacity</span>
+            <span class="scb-val">{{ svc.capacity }}</span>
+          </div>
+        </div>
+
+        <p class="sdc-desc">{{ svc.desc }}</p>
+
+        <div class="sdc-body-grid">
+          <div class="sdc-benefits-col">
+            <h4 class="sdc-subheading">Key Highlights & Benefits</h4>
+            <ul class="check-list">
+              {% for b in svc.benefits %}
+              <li>{{ b }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="sdc-meta-col">
+            <div class="sdc-stat-box">
+              <span class="ssb-label">Estimated Savings</span>
+              <span class="ssb-val">{{ svc.savings }}</span>
+            </div>
+            <div class="sdc-stat-box">
+              <span class="ssb-label">System Size</span>
+              <span class="ssb-val">{{ svc.capacity }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- SINGLE CTA AT THE BOTTOM FOR QUOTE -->
+<section class="cta-banner">
+  <div class="container text-center">
+    <h2>Ready to Power Your Property with Solar Energy?</h2>
+    <p>Schedule a free roof assessment and get a customized solar cost breakdown today.</p>
+    <div class="cta-btns">
+      <a href="{{ url_for('contact') }}" class="btn btn-primary btn-lg">⚡ Request Free Solar Quote</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
