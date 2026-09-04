@@ -1,125 +1,150 @@
 const nodemailer = require('nodemailer');
 
-exports.handler = async (event) => {
-  // Only allow POST requests
+exports.handler = async (event, context) => {
+  console.log('📧 Email function called');
+  console.log('HTTP Method:', event.httpMethod);
+
+  // CORS headers
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+  };
+
+  // Handle OPTIONS (preflight)
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 200, headers, body: 'OK' };
+  }
+
+  // Only POST allowed
   if (event.httpMethod !== 'POST') {
+    console.log('❌ Invalid method:', event.httpMethod);
     return {
       statusCode: 405,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'Method not allowed' })
+      headers,
+      body: JSON.stringify({ error: 'Only POST method is allowed' })
     };
   }
 
   try {
-    const { to_email, user_name, user_phone, user_location, user_message } = JSON.parse(event.body);
+    // Parse request body
+    let body = event.body;
+    if (typeof body === 'string') {
+      body = JSON.parse(body);
+    }
 
-    // Validate required fields
+    console.log('📩 Request body:', body);
+
+    const { to_email, user_name, user_phone, user_location, user_message } = body;
+
+    // Validate
     if (!to_email || !user_name) {
       return {
         statusCode: 400,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ error: 'Missing required fields' })
+        headers,
+        body: JSON.stringify({ error: 'Missing to_email or user_name' })
       };
     }
 
-    // Get Gmail credentials from environment variables
-    const sender_email = process.env.GMAIL_USER;
-    const sender_password = process.env.GMAIL_APP_PASSWORD;
+    // Get credentials
+    const gmail_user = process.env.GMAIL_USER;
+    const gmail_pass = process.env.GMAIL_APP_PASSWORD;
 
-    if (!sender_email || !sender_password) {
+    console.log('Checking credentials...');
+    console.log('GMAIL_USER set:', !!gmail_user);
+    console.log('GMAIL_APP_PASSWORD set:', !!gmail_pass);
+
+    if (!gmail_user || !gmail_pass) {
+      console.error('❌ Missing Gmail credentials');
       return {
         statusCode: 500,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ error: 'Email service not configured' })
+        headers,
+        body: JSON.stringify({ 
+          error: 'Email service not configured',
+          hint: 'Missing GMAIL_USER or GMAIL_APP_PASSWORD environment variables'
+        })
       };
     }
 
-    // Create transporter using Gmail SMTP
+    // Create transporter
+    console.log('Creating transporter...');
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: sender_email,
-        pass: sender_password
+        user: gmail_user,
+        pass: gmail_pass
       }
     });
 
-    // Email template
-    const htmlContent = `
-<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    body { font-family: Arial, sans-serif; background: #f9fafb; }
-    .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .header { background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
-    .content { padding: 30px; }
-    .detail { margin: 15px 0; }
-    .label { font-weight: bold; color: #059669; }
-    .footer { background: #f3f4f6; padding: 20px; text-align: center; font-size: 12px; color: #6b7280; border-radius: 0 0 8px 8px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>✅ Thank You!</h1>
-      <p>We've Received Your Solar Inquiry</p>
-    </div>
-    <div class="content">
-      <p>Hi <strong>${user_name}</strong>,</p>
-      <p>Thank you for reaching out to Future Energy Solutions! We're thrilled to help you explore solar energy.</p>
-      <p>Your inquiry has been successfully received, and our solar experts are reviewing your details right now. You can expect to hear from us within <strong>2 hours during business hours</strong> (Monday - Saturday, 9 AM - 6 PM IST).</p>
-      
-      <h3 style="color: #059669; border-bottom: 2px solid #059669; padding-bottom: 10px;">Your Details:</h3>
-      <div class="detail">
-        <span class="label">Name:</span> ${user_name}
-      </div>
-      <div class="detail">
-        <span class="label">Phone:</span> ${user_phone}
-      </div>
-      <div class="detail">
-        <span class="label">Location:</span> ${user_location}
-      </div>
+    // Verify
+    console.log('Verifying connection...');
+    await transporter.verify();
+    console.log('✅ Connection verified');
 
-      <p style="margin-top: 30px; color: #059669; font-weight: bold;">
-        Best regards,<br>
-        Future Energy Solutions Team<br>
-        <em>Powering India with Clean Solar Energy</em>
-      </p>
-    </div>
-    <div class="footer">
-      <p>© 2024 Future Energy Solutions. All Rights Reserved.</p>
-    </div>
-  </div>
-</body>
-</html>
-    `;
-
-    // Send email
-    const mailOptions = {
-      from: `"Future Energy Solutions" <${sender_email}>`,
+    // Customer email
+    const customerEmail = {
+      from: gmail_user,
       to: to_email,
-      subject: 'We Received Your Solar Inquiry - Future Energy Solutions',
-      html: htmlContent
+      subject: '✅ Solar Inquiry Received - Future Energy Solutions',
+      html: `
+        <h2>Thank You for Your Inquiry!</h2>
+        <p>Hi ${user_name},</p>
+        <p>We've received your solar inquiry and will contact you within 2 hours.</p>
+        <p><strong>Your Details:</strong></p>
+        <ul>
+          <li>Name: ${user_name}</li>
+          <li>Phone: ${user_phone}</li>
+          <li>Location: ${user_location}</li>
+        </ul>
+        <p>Best regards,<br>Future Energy Solutions Team</p>
+      `
     };
 
-    await transporter.sendMail(mailOptions);
+    // Company notification email
+    const companyEmail = {
+      from: gmail_user,
+      to: gmail_user,
+      subject: `New Solar Inquiry from ${user_name}`,
+      html: `
+        <h2>📨 New Inquiry Received</h2>
+        <p><strong>Customer:</strong> ${user_name}</p>
+        <p><strong>Email:</strong> ${to_email}</p>
+        <p><strong>Phone:</strong> ${user_phone}</p>
+        <p><strong>Location:</strong> ${user_location}</p>
+        <p><strong>Message:</strong> ${user_message || 'N/A'}</p>
+        <p>Please follow up with the customer.</p>
+      `
+    };
+
+    // Send both emails
+    console.log('Sending customer email to:', to_email);
+    await transporter.sendMail(customerEmail);
+    console.log('✅ Customer email sent');
+
+    console.log('Sending company notification');
+    await transporter.sendMail(companyEmail);
+    console.log('✅ Company email sent');
 
     return {
       statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({
-        message: 'Email sent successfully!',
-        success: true
+        success: true,
+        message: '✅ Emails sent successfully!'
       })
     };
+
   } catch (error) {
-    console.error('Email error:', error);
+    console.error('❌ Error:', error.message);
+    console.error('Full error:', error);
+    
     return {
       statusCode: 500,
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({
         error: 'Failed to send email',
-        details: error.message
+        message: error.message
       })
     };
   }
