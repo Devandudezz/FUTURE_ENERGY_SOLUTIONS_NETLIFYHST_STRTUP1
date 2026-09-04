@@ -7,10 +7,3 @@
   node_bundler = "esbuild"
   external_node_modules = ["nodemailer"]
 
-# SPA fallback for non-API/non-asset routes only
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  conditions = { Role = ["visitor"] }
-
