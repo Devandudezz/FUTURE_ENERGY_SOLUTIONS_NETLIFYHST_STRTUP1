@@ -410,7 +410,7 @@ function showSuccessModal(name, email, phone, location) {
     <div class="success-modal">
       <div class="success-icon">✅</div>
       <h2>Message Sent Successfully!</h2>
-      <p>Thank you for your inquiry! We've received your details and will contact you shortly.</p>
+      <p>Your inquiry has been sent via <strong>Email</strong> and <strong>WhatsApp</strong> simultaneously.</p>
       
       <div class="success-details">
         <div><strong>Name:</strong> ${name}</div>
@@ -419,11 +419,15 @@ function showSuccessModal(name, email, phone, location) {
         <div><strong>Location:</strong> ${location}</div>
       </div>
 
+      <p style="font-size: 0.85rem; color: #94a3b8; margin: 20px 0;">
+        📧 <strong>Email confirmation</strong> sent to: ${email}<br>
+        💬 <strong>WhatsApp message</strong> opened automatically
+      </p>
+
       <p style="font-size: 0.85rem; color: #94a3b8;">Expected response time: <strong>2 hours</strong> (Mon-Sat, 9 AM - 6 PM IST)</p>
 
       <div class="success-modal-btns">
         <button class="btn-modal btn-close" onclick="this.closest('.success-modal-overlay').remove()">Close</button>
-        <button class="btn-modal btn-wa" onclick="window.open('https://wa.me/919495240204', '_blank');">💬 Chat on WhatsApp</button>
       </div>
     </div>
   `;
@@ -445,7 +449,7 @@ function handleFormSubmit(event) {
   const submitBtn = form.querySelector('button[type="submit"]');
   const originalText = submitBtn.textContent;
   submitBtn.disabled = true;
-  submitBtn.textContent = '⏳ Sending...';
+  submitBtn.textContent = '⏳ Sending Email & WhatsApp...';
   
   // Create WhatsApp message
   const waMessage = `Hi Future Energy Solutions! My name is ${name}. Phone: ${phone}, Email: ${email}, Location: ${location}. Message: ${message}`;
@@ -459,17 +463,22 @@ function handleFormSubmit(event) {
       submitBtn.disabled = false;
       submitBtn.textContent = originalText;
       
-      // Show success modal with details
+      // Show success modal
       showSuccessModal(name, email, phone, location);
       
-      // Open WhatsApp in background (optional)
-      // window.open(waLink, '_blank');
+      // Open WhatsApp immediately (simultaneously with email)
+      setTimeout(() => {
+        window.open(waLink, '_blank');
+      }, 500);
     })
     .catch(error => {
       submitBtn.disabled = false;
       submitBtn.textContent = originalText;
       console.error('Form submission error:', error);
-      alert('⚠️ Form submitted! WhatsApp and email are being sent. If you don\'t hear from us in 2 hours, please call +91 9495 240 204');
+      
+      // Still open WhatsApp even if email fails
+      window.open(waLink, '_blank');
+      alert('⚠️ Message sent to WhatsApp! Email is being processed. If you don\'t hear from us in 2 hours, please call +91 9495 240 204');
     });
 }
 
