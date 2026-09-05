@@ -67,21 +67,6 @@ DevOps & Git Workflow
 - CI/CD pipeline understanding
 - Build logs and deployment troubleshooting
 
----
-
-Key Achievements
-
-| Learning | Before | After |
-|----------|--------|-------|
-| **SMTP** | "How do emails work?" | Configured 3+ SMTP providers, debugged delivery issues |
-| **Backend** | Basic HTML/CSS | Built Node.js servers and serverless functions |
-| **Hosting** | FTP uploads | Git push → Automatic deployment on Netlify |
-| **Email** | Manual form handling | Automated dual-notification system |
-| **Theming** | Static CSS | Dynamic dark/light mode with persistence |
-| **Deployment** | Manual server setup | Serverless with custom domain |
-| **Debugging** | Browser console only | DevTools Network, Function logs, SMTP debug mode |
-
----
 
 Tech Stack
 
@@ -131,8 +116,3 @@ Tech Stack
 - Git: https://git-scm.com/
 - GitHub: https://github.com/
 
----
-
-
-
-🚀 Ready to deploy? See [DEPLOYMENT.md](./DEPLOYMENT.md)
