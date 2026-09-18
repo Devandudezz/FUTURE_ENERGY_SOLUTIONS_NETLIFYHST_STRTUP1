@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}Contact Us – Future Energy Solutions{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="{{ url_for('index') }}">Home</a> <span>›</span> Contact</div>
+    <h1>Contact Us</h1>
+    <p>Reach our solar experts — we respond within 2 hours on all working days.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="contact-grid">
+
+      <!-- LEFT: INFO -->
+      <div class="contact-info" data-aos="left">
+        <h3>Get In Touch</h3>
+        <p style="color:#6b7280;margin-bottom:28px">Our team is ready to answer your questions, provide a free quote, or help with subsidy applications.</p>
+
+        <div class="ci-item">
+          <div class="ci-icon">📍</div>
+          <div>
+            <strong>Office Address</strong>
+            <span>{{ company_address }}</span>
+          </div>
+        </div>
+
+        <div class="ci-item">
+          <div class="ci-icon">📞</div>
+          <div>
+            <strong>Phone / WhatsApp</strong>
+            <span>{{ company_phone }}</span>
+          </div>
+        </div>
+
+        <div class="ci-item">
+          <div class="ci-icon">✉️</div>
+          <div>
+            <strong>Email</strong>
+            <span>{{ company_email }}</span>
+          </div>
+        </div>
+
+        <div class="ci-item">
+          <div class="ci-icon">🕐</div>
+          <div>
+            <strong>Working Hours</strong>
+            <span>Monday – Saturday: 9:00 AM – 6:00 PM</span>
+          </div>
+        </div>
+
+        <!-- MAP EMBED -->
+        <div class="map-wrap">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3941.547148539914!2d76.59212107449794!3d8.921622190661626!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b05fda3b991c85d%3A0xd7df8c5629408c55!2sFuture%20Energy%20Solutions!5e0!3m2!1sen!2sin!4v1788356578347!5m2!1sen!2sin"allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin""
+            width="100%"
+            height="600"
+            style="border:0;border-radius:12px"
+            allowfullscreen=""
+            loading="lazy">
+          </iframe>
+        </div>
+      </div>
+
+      <!-- RIGHT: FORM -->
+      <div class="contact-form-wrap" data-aos="right">
+        <h3>Send Us a Message</h3>
+        <p style="color:#6b7280;margin-bottom:28px">Fill in the form and we'll contact you within 24 hours. You can also ask for a free quote.</p>
+
+        <form method="POST" action="#" class="solar-form" id="contactForm">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Full Name *</label>
+              <input type="text" name="name" class="form-input" placeholder="Your full name" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Phone Number *</label>
+              <input type="tel" name="phone" class="form-input" placeholder="Enter your number here" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <input type="email" name="email" class="form-input" placeholder="Enter your mail here" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Your Location *</label>
+            <input type="text" name="location" class="form-input" placeholder="City, State" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Message *</label>
+            <textarea name="message" class="form-input form-textarea" placeholder="Tell us about your requirements, questions or how we can help you... (e.g., interested in 5kW solar system, need subsidy help, want free quote, etc.)" required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;font-size:1.05rem" onclick="sendToWhatsApp(event)">
+            💬 Send Inquiry via WhatsApp + Email
+          </button>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- QUICK CONTACT CARDS -->
+<section class="section-sm bg-light">
+  <div class="container">
+    <div class="quick-contact-grid">
+
+      <div class="qc-card" data-aos="up">
+        <div style="font-size:2rem">💬</div>
+        <h4>WhatsApp</h4>
+        <p>Instant replies on WhatsApp during working hours. Send photos of your roof for faster assessment.</p>
+        <a href="https://wa.me/{{ company_whatsapp }}" class="btn btn-whatsapp btn-sm" style="margin-top:12px" target="_blank">Open WhatsApp</a>
+      </div>
+
+      <div class="qc-card" data-aos="up">
+        <div style="font-size:2rem">📞</div>
+        <h4>Phone Call</h4>
+        <p>Speak directly to a solar expert. Mon–Sat, 9 AM – 6 PM. No robots, no hold music.</p>
+        <a href="tel:{{ company_phone }}" class="btn btn-primary btn-sm" style="margin-top:12px">Call Now</a>
+      </div>
+
+      <div class="qc-card" data-aos="up">
+        <div style="font-size:2rem">✉️</div>
+        <h4>Email</h4>
+        <p>For detailed project enquiries, documentation or formal proposals. We reply within 4 hours.</p>
+        <a href="mailto:{{ company_email }}" class="btn btn-outline btn-sm" style="margin-top:12px">Send Email</a>
+      </div>
+
+      <div class="qc-card" data-aos="up">
+        <div style="font-size:2rem">🏠</div>
+        <h4>Site Visit</h4>
+        <p>Book a free on-site assessment. Our engineer visits your property and gives you an instant quote.</p>
+        <a href="{{ url_for('contact') }}" class="btn btn-outline btn-sm" style="margin-top:12px">Book Visit</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}
