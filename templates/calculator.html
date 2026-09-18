@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block title %}Solar Calculator – Future Energy Solutions{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="{{ url_for('index') }}">Home</a> <span>›</span> Solar Calculator</div>
+    <h1>Free Solar Savings Calculator</h1>
+    <p>Enter your monthly electricity bill and instantly see how much solar can save you.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="calc-wrap">
+
+      <!-- INPUT CARD -->
+      <div class="calc-card" data-aos="left">
+        <h3>📊 Your Details</h3>
+        <p style="color:#6b7280;margin-bottom:28px">Fill in the fields below — results update instantly.</p>
+
+        <div class="form-group">
+          <label class="form-label">Monthly Electricity Bill (₹)</label>
+          <input type="number" id="monthlyBill" class="form-input" placeholder="e.g. 3000" min="500" max="500000" value="3000" oninput="calcSolar()" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Your State</label>
+          <select id="stateSelect" class="form-input form-select" onchange="calcSolar()">
+            <option value="3.5">Kerala (3.5 kWh/kW/day)</option>
+            <option value="4.5">Tamil Nadu (4.5 kWh/kW/day)</option>
+            <option value="5.0">Rajasthan (5.0 kWh/kW/day)</option>
+            <option value="4.0">Karnataka (4.0 kWh/kW/day)</option>
+            <option value="4.5">Maharashtra (4.5 kWh/kW/day)</option>
+            <option value="4.2">Gujarat (4.2 kWh/kW/day)</option>
+            <option value="3.8">West Bengal (3.8 kWh/kW/day)</option>
+            <option value="4.3">Andhra Pradesh (4.3 kWh/kW/day)</option>
+            <option value="4.1">Telangana (4.1 kWh/kW/day)</option>
+            <option value="4.0">Other State (4.0 kWh/kW/day)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Electricity Tariff (₹/kWh)</label>
+          <input type="number" id="tariff" class="form-input" placeholder="e.g. 7" min="3" max="20" value="7" step="0.5" oninput="calcSolar()" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Property Type</label>
+          <select id="propType" class="form-input form-select" onchange="calcSolar()">
+            <option value="residential">Residential</option>
+            <option value="commercial">Commercial</option>
+            <option value="industrial">Industrial</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="calcSolar()">
+          ⚡ Calculate Now
+        </button>
+      </div>
+
+      <!-- RESULTS CARD -->
+      <div class="calc-card results-card" data-aos="right">
+        <h3>💡 Your Solar Estimate</h3>
+        <p style="color:#6b7280;margin-bottom:24px">Based on your inputs — accurate to ±10%.</p>
+
+        <div class="result-grid">
+          <div class="result-item">
+            <div class="ri-icon">⚡</div>
+            <div class="ri-val" id="systemSize">2.0 kW</div>
+            <div class="ri-lbl">Recommended System Size</div>
+          </div>
+          <div class="result-item">
+            <div class="ri-icon">💰</div>
+            <div class="ri-val" id="syscost">₹1,00,000</div>
+            <div class="ri-lbl">Estimated System Cost</div>
+          </div>
+          <div class="result-item">
+            <div class="ri-icon">🏛️</div>
+            <div class="ri-val" id="subsidy">₹30,000</div>
+            <div class="ri-lbl">Govt. Subsidy Available</div>
+          </div>
+          <div class="result-item">
+            <div class="ri-icon">💵</div>
+            <div class="ri-val" id="netcost">₹70,000</div>
+            <div class="ri-lbl">Net Cost After Subsidy</div>
+          </div>
+          <div class="result-item highlight-result">
+            <div class="ri-icon">📈</div>
+            <div class="ri-val" id="annualSave">₹36,000</div>
+            <div class="ri-lbl">Annual Savings</div>
+          </div>
+          <div class="result-item highlight-result">
+            <div class="ri-icon">🔄</div>
+            <div class="ri-val" id="roi">2.8 yrs</div>
+            <div class="ri-lbl">Payback Period</div>
+          </div>
+        </div>
+
+        <div class="result-bar">
+          <div class="rb-label">
+            <span>Bill Coverage by Solar</span>
+            <span id="coverPct">80%</span>
+          </div>
+          <div class="rb-track">
+            <div class="rb-fill" id="coverBar" style="width:80%"></div>
+          </div>
+        </div>
+
+        <div class="result-savings-box">
+          <div>🌱 25-Year Total Savings</div>
+          <div class="rsb-val" id="lifeSave">₹9,00,000</div>
+        </div>
+
+        <a href="{{ url_for('contact') }}" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:20px">
+          ⚡ Get Detailed Quote for This System
+        </a>
+        <a href="https://wa.me/{{ company_whatsapp }}" class="btn btn-whatsapp" style="width:100%;justify-content:center;margin-top:10px" target="_blank">
+          💬 Discuss with an Expert
+        </a>
+      </div>
+
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div style="margin-top:70px" class="text-center">
+      <span class="tag">How It Works</span>
+      <h2 class="sec-title">Our Simple 4-Step Process</h2>
+      <div class="steps-grid">
+        <div class="step-card" data-aos="up">
+          <div class="step-num">01</div>
+          <div class="step-icon">📞</div>
+          <h4>Free Consultation</h4>
+          <p>Call or WhatsApp us. Our solar expert will discuss your needs and visit your site for free.</p>
+        </div>
+        <div class="step-card" data-aos="up" style="animation-delay:.1s">
+          <div class="step-num">02</div>
+          <div class="step-icon">📐</div>
+          <h4>Custom Design</h4>
+          <p>We design the optimal system for your roof space, consumption pattern, and budget.</p>
+        </div>
+        <div class="step-card" data-aos="up" style="animation-delay:.2s">
+          <div class="step-num">03</div>
+          <div class="step-icon">🔧</div>
+          <h4>Fast Installation</h4>
+          <p>Certified engineers install your system in 2–3 days with minimal disruption.</p>
+        </div>
+        <div class="step-card" data-aos="up" style="animation-delay:.3s">
+          <div class="step-num">04</div>
+          <div class="step-icon">💰</div>
+          <h4>Start Saving</h4>
+          <p>Your system goes live. We handle net-meter and subsidy. You start saving from day one.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

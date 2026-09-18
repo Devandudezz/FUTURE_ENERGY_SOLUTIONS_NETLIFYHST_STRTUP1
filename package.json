@@ -1,0 +1,11 @@
+{
+  "name": "future-energy-solutions",
+  "version": "1.0.0",
+  "description": "Future Energy Solutions - Solar Installation Website",
+  "dependencies": {
+    "nodemailer": "^6.9.7"
+  },
+  "scripts": {
+    "build": "npm install"
+  }
+}
